@@ -16,7 +16,7 @@ app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5}));
 
 const authRouter = require('./routes/auth');
 const coinsRouter = require('./routes/coins');
-
+const usersRouter = require('./routes/users');
 // Test database connection
 var db = mysql.createConnection({
     host: process.env.host,
@@ -32,5 +32,5 @@ app.get('/', (req, res) => {
 
 app.use("/auth/",authRouter);
 app.use("/coins/",coinsRouter);
-
+app.use("/users/",usersRouter);
 app.listen(3000)
