@@ -31,8 +31,13 @@ async function transfer(email, value){
     }
 }
 
+async function exchangeRate(){
+    return(await db.query(`SELECT * FROM exchange_rates`));
+}
+
 module.exports = {
     get,
     exchange,
-    transfer
+    transfer,
+    exchangeRate
 }

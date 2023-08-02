@@ -36,4 +36,8 @@ router.post('/transfer', async function(req, res) {
     }
 });
 
+router.post('/exchangeRate', async function(req, res) {
+    res.json(await coins.exchangeRate());
+})
+
 module.exports = router;
