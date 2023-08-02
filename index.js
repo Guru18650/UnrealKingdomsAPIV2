@@ -7,13 +7,14 @@ const cors = require('cors');
 const sanitizer = require("perfect-express-sanitizer");
 const https = require("https");
 const fs = require('fs');
+require('dotenv').config();
+
 if(process.env.usehttps == "true"){
 const options = {
   key: fs.readFileSync(process.env.httpskey),
   cert: fs.readFileSync(process.env.httpscert)
 };}
 
-require('dotenv').config();
 
 // Prepare expressJS
 const app = express();
