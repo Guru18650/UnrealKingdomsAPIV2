@@ -12,7 +12,7 @@ async function login(email, pass){
             id: rows[0].user_id,
             email: rows[0].email
         };
-        return jwt.sign(user, process.env.jsonkey, {expiresIn: '365 d'});
+        return {jwt:jwt.sign(user, process.env.jsonkey, {expiresIn: '365 d'})};
     }
     else
         return('Account not found');
