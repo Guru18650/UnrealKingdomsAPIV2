@@ -5,8 +5,14 @@ const userAuth = require('../services/auth');
 router.post('/login', async function(req, res) {
     if(req.body.email == null || req.body.password == null)
         res.json("Fill in all the data", 400);
-    else
-        res.json(await userAuth.login(req.body.email, req.body.password));
+    else{
+        let expires;
+        if(req.body.expires == null)
+            expires = "1 d";
+        else
+            expires = req.body.expires;
+    }
+        res.json(await userAuth.login(req.body.email, req.body.password, expires));
 })
 
 router.post('/register', async function(req, res) {

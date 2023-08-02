@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
-async function login(email, pass){
+async function login(email, pass, expires){
     const rows = await db.query(`SELECT user_id, salt, password FROM users WHERE email LIKE '${email}'`);
     if(rows.length != 1)
         return("Account not found")
@@ -12,7 +12,7 @@ async function login(email, pass){
             id: rows[0].user_id,
             email: rows[0].email
         };
-        return {jwt:jwt.sign(user, process.env.jsonkey, {expiresIn: '365 d'})};
+        return {jwt:jwt.sign(user, process.env.jsonkey, {expiresIn: expires})};
     }
     else
         return('Account not found');
