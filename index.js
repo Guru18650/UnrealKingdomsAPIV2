@@ -9,7 +9,7 @@ const https = require("https");
 const fs = require('fs');
 require('dotenv').config();
 
-const options = {}
+var options = {}
 if(process.env.usehttps == "true"){
 options = {
   key: fs.readFileSync(process.env.httpskey),
