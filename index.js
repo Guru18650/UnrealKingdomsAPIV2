@@ -27,6 +27,7 @@ app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5}));
 const authRouter = require('./routes/auth');
 const coinsRouter = require('./routes/coins');
 const usersRouter = require('./routes/users');
+const panelsRouter = require('./routes/panels');
 
 // Test database connection
 var db = mysql.createConnection({
@@ -44,6 +45,7 @@ app.get('/', (req, res) => {
 app.use("/auth/",authRouter);
 app.use("/coins/",coinsRouter);
 app.use("/users/",usersRouter);
+app.use("/panels/",panelsRouter);
 
 if(process.env.usehttps == "true"){
     https.createServer(options, app).listen(443, () => {
