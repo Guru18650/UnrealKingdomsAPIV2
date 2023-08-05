@@ -3,10 +3,10 @@ const router = express.Router();
 const userAuth = require('../services/auth');
 
 router.post('/login', async function(req, res) {
+    let expires;
     if(req.body.email == null || req.body.password == null)
         res.json("Fill in all the data", 400);
     else{
-        let expires;
         if(req.body.expires == null)
             expires = "1 d";
         else
