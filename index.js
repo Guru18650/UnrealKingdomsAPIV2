@@ -22,7 +22,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 app.use(cors());
-app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5}));
+app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5},['/auth/login','/auth/register']));
 
 const authRouter = require('./routes/auth');
 const coinsRouter = require('./routes/coins');
