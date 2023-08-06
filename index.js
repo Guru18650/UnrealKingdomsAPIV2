@@ -28,6 +28,7 @@ const authRouter = require('./routes/auth');
 const coinsRouter = require('./routes/coins');
 const usersRouter = require('./routes/users');
 const panelsRouter = require('./routes/panels');
+const adsRouter = require('./routes/ads');
 
 // Test database connection
 var db = mysql.createConnection({
@@ -46,6 +47,7 @@ app.use("/auth/",authRouter);
 app.use("/coins/",coinsRouter);
 app.use("/users/",usersRouter);
 app.use("/panels/",panelsRouter);
+app.use("/ads/",adsRouter);
 
 if(process.env.usehttps == "true"){
     https.createServer(options, app).listen(443, () => {
