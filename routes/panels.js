@@ -5,7 +5,7 @@ const db = require('../services/db');
 router.post('/get', async function(req, res) {
     const {email, id} = req.body;
     if(!email || !id)
-        res.json("Fill in all the data", 400);
+        res.json({msg:"Fill in all the data"}, 400);
     else {
         const rows = await db.query(`SELECT * FROM panels WHERE owner_email LIKE '${email}' AND panel_number = ${id}`);
         if(rows.length == 0)

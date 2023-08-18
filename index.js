@@ -22,7 +22,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 app.use(cors());
-app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5},['/auth/login','/auth/register']));
+app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5},['/auth/login','/auth/register','/items/update']));
 
 const authRouter = require('./routes/auth');
 const coinsRouter = require('./routes/coins');
@@ -30,6 +30,7 @@ const usersRouter = require('./routes/users');
 const panelsRouter = require('./routes/panels');
 const adsRouter = require('./routes/ads');
 const miscRouter = require('./routes/misc');
+const itemsRouter = require('./routes/items');
 
 // Test database connection
 var db = mysql.createConnection({
@@ -50,6 +51,7 @@ app.use("/users/",usersRouter);
 app.use("/panels/",panelsRouter);
 app.use("/ads/",adsRouter);
 app.use("/misc/",miscRouter);
+app.use("/items/",itemsRouter);
 
 if(process.env.usehttps == "true"){
     https.createServer(options, app).listen(443, () => {
