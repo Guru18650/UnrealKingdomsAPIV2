@@ -11,8 +11,8 @@ router.post('/login', async function(req, res) {
             expires = "1 d";
         else
             expires = req.body.expires;
+            res.json(await userAuth.login(req.body.email, req.body.password, expires));
     }
-        res.json(await userAuth.login(req.body.email, req.body.password, expires));
 })
 
 router.post('/register', async function(req, res) {
