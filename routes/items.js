@@ -16,12 +16,15 @@ router.post('/get', async function(req, res) {
 });
 
 router.post('/update', async function(req, res) {
-    const {email, data} = req.body;
+    const {email, data} = req.body
     if(!email || !data)
         res.json({msg:"Fill in all the data"}, 400);
     else {
         await db.query(`DELETE FROM user_items WHERE user_email LIKE '${email}'`)
-        d = await JSON.parse(data);
+        if(typeof data === 'string')
+            d = await JSON.parse(data);
+        else
+            d = await JSON.parse(await JSON.stringify(data));
         for (let id = 0; id < d.length; id++) {
             const e = d[id];
             await db.query(`INSERT INTO user_items VALUES (NULL, '${email}','${e.name}','${e.quantity}','${e.slot_number}','${e.item_id}')`);
