@@ -3,14 +3,20 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
-async function login(email, pass, expires){
-    const rows = await db.query(`SELECT user_id, salt, password FROM users WHERE email LIKE '${email}'`);
+async function login(email, pass, expires, admin){
+    var rows = "";
+    if(!admin)
+        rows = await db.query(`SELECT user_id, salt, password FROM users WHERE email LIKE '${email}'`);
+    else 
+        rows = await db.query(`SELECT user_id, salt, password FROM users WHERE email LIKE '${email}' AND isAdmin = 1`);
+
     if(rows.length != 1)
         return("Account not found")
     if(rows[0].password == hashPassword(pass, rows[0].salt)){
         const user = {
             id: rows[0].user_id,
-            email: rows[0].email
+            email: rows[0].email,
+            admin:admin
         };
         return {jwt:jwt.sign(user, process.env.jsonkey, {expiresIn: expires})};
     }
@@ -28,13 +34,23 @@ async function register(email, pass, username){
     return "Success";
 }
 
-async function verify(token){
-    try {
-        const v = jwt.verify(token, process.env.jsonkey);
-        return {authenticated: "true"}
-    } catch (error) {
-        return {authenticated: "false"}
-    }
+async function verify(token, admin){
+    var verified;
+        const v = jwt.verify(token, process.env.jsonkey, function(err, decoded) {
+            if(err != null)
+                verified = false;
+            else{
+                if(admin){
+                    if(decoded.admin)
+                        verified = true;
+                    else
+                        verified = false;
+                } else
+                verified = true;
+
+            }
+        });
+        return {authenticated:verified};
 }
 
 function hashPassword(password, salt){

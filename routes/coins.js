@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const coins = require('../services/coins');
-
+const auth = require('../services/auth');
 const currencies = ["uk","dg","cc"];
+const db = require('../services/db');
+
 
 router.post('/get', async function(req, res) {
     if(req.body.email == null)
@@ -24,6 +26,28 @@ router.post('/exchange', async function(req, res) {
             res.json("Invalid conversion", 405);
     }
 });
+
+router.post('/setRates', async function(req, res){
+   const { token, uk, cc, dg } = req.body;
+   if(!token||!uk||!cc|!dg)
+    res.json("Fill in all the data", 400);
+    else {
+        if(uk>0||cc>0||dg>0){
+            const authorised = await auth.verify(token, true);
+            if(!authorised.authenticated){
+                res.json({msg:"Unauthorized"}, 401);
+            } else {
+                await db.query(`UPDATE exchange_rates SET value = '${uk}' WHERE currency LIKE 'uk'`);
+                await db.query(`UPDATE exchange_rates SET value = '${dg}' WHERE currency LIKE 'dg'`);
+                await db.query(`UPDATE exchange_rates SET value = '${cc}' WHERE currency LIKE 'cc'`);
+                res.json({msg:"Success"});
+            } 
+        }else{
+            res.json("Bad query", 401);
+        }
+    }
+
+})
 
 router.post('/transfer', async function(req, res) {
     if(req.body.email == null || req.body.value == null || req.body.token == null)

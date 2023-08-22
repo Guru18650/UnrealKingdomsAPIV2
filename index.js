@@ -22,7 +22,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 app.use(cors());
-app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5},['/auth/login','/auth/register','/items/update']));
+app.use(sanitizer.clean({xss: true, noSql: true, sql: true, sqlLevel: 5},['/auth/login','/auth/register','/items/update','misc/updateDownload','ads/add']));
+app.use(require("morgan")("dev"));
 
 const authRouter = require('./routes/auth');
 const coinsRouter = require('./routes/coins');
