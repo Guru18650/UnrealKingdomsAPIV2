@@ -7,10 +7,17 @@ const db = require('../services/db');
 
 
 router.post('/get', async function(req, res) {
+    const {email} = req.body;
     if(req.body.email == null)
         res.json("Fill in all the data", 400);
-    else
-        res.json(await coins.get(req.body.email));
+    else {
+        const rows = await db.query(`SELECT uk_coin, dg_coin, cc_coin FROM users WHERE email LIKE '${email}'`);
+        if(rows.length != 1)
+            res.json({msg:"No result"}, 404)
+        else
+            res.json({msg:"Success",data:rows[0]})
+    }
+        
 });
 
 router.post('/exchange', async function(req, res) {
