@@ -9,6 +9,7 @@ async function query(sql, params) {
         multipleStatements: false
     });
     const [res,] = await db.execute(sql, params);
+    db.end()
     return res;
 }
 
