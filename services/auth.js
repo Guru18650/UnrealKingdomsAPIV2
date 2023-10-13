@@ -1,6 +1,7 @@
 const db = require('./db');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const { decode } = require('querystring');
 
 
 async function login(email, pass, expires, admin){
@@ -35,11 +36,12 @@ async function register(email, pass, username){
 }
 
 async function verify(token, admin){
-    var verified;
+    var verified, decode;
         const v = jwt.verify(token, process.env.jsonkey, function(err, decoded) {
             if(err != null)
                 verified = false;
             else{
+                decode = decoded;
                 if(admin){
                     if(decoded.admin)
                         verified = true;
@@ -50,7 +52,7 @@ async function verify(token, admin){
 
             }
         });
-        return {authenticated:verified};
+        return {authenticated:verified, data:decode};
 }
 
 function hashPassword(password, salt){
@@ -62,8 +64,19 @@ function generateSalt(){
     return crypto.randomBytes(16).toString('hex');
 }
 
+function generatePReset(email){
+    const user = {
+        email: email,
+    };
+    var jwtt = jwt.sign(user, process.env.jsonkey, {expiresIn: "1d"});
+    return `<h1> Unreal Kingdoms </h1> <br> Password reset has been activated on your account. Link to set a new one: <a href="https://dashboard.unrealkingdoms.com/reset?j=${jwtt}">https://dashboard.unrealkingdoms.com/reset?j=${jwtt}</a>`
+}
+
 module.exports = {
     login,
     register,
-    verify
+    verify,
+    generatePReset,
+    generateSalt,
+    hashPassword
 }

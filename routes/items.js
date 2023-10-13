@@ -29,7 +29,7 @@ router.post('/update', async function(req, res) {
             const e = d[id];
             await db.query(`INSERT INTO user_items VALUES (NULL, '${email}','${e.name}','${e.quantity}','${e.slot_number}','${e.item_id}')`);
         }
-        res.json({msg:"Success",})
+        res.json({msg:"Success"})
 
     }
 });
